@@ -20,6 +20,7 @@ namespace KSP_Mod_Manager
             InitializeComponent();
             txtKspPath.Text = Properties.Settings.Default.KSP_Path;
             txtModPath.Text = Properties.Settings.Default.Mods_Path;
+            txtShipsPath.Text = Properties.Settings.Default.ShipsPath;
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -60,6 +61,7 @@ namespace KSP_Mod_Manager
 
             Properties.Settings.Default.KSP_Path = txtKspPath.Text;
             Properties.Settings.Default.Mods_Path = txtModPath.Text;
+            Properties.Settings.Default.ShipsPath = txtShipsPath.Text;
             Properties.Settings.Default.Save();
 
             this.DialogResult = DialogResult.OK;
@@ -92,6 +94,16 @@ namespace KSP_Mod_Manager
             if (DialogResult.OK == folderBrowserDialog1.ShowDialog())
             {
                 txtModPath.Text = folderBrowserDialog1.SelectedPath;
+            }
+        }
+
+        private void btnSelectShipsPath_Click(object sender, EventArgs e)
+        {
+            folderBrowserDialog1.SelectedPath = txtShipsPath.Text;
+            folderBrowserDialog1.ShowNewFolderButton = true;
+            if (DialogResult.OK == folderBrowserDialog1.ShowDialog())
+            {
+                txtShipsPath.Text = folderBrowserDialog1.SelectedPath;
             }
         }
     }

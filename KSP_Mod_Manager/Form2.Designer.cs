@@ -38,14 +38,18 @@
             this.btnSelectModPath = new System.Windows.Forms.Button();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.label1 = new System.Windows.Forms.Label();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.txtShipsPath = new System.Windows.Forms.TextBox();
+            this.btnSelectShipsPath = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnSave
             // 
             this.btnSave.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnSave.Location = new System.Drawing.Point(281, 161);
+            this.btnSave.Location = new System.Drawing.Point(281, 217);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 0;
@@ -56,7 +60,7 @@
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(200, 161);
+            this.btnCancel.Location = new System.Drawing.Point(200, 217);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 1;
@@ -128,13 +132,44 @@
             this.label1.TabIndex = 6;
             this.label1.Text = "Note: it is not recommended to change these paths after installing mods.";
             // 
+            // groupBox3
+            // 
+            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox3.Controls.Add(this.btnSelectShipsPath);
+            this.groupBox3.Controls.Add(this.txtShipsPath);
+            this.groupBox3.Location = new System.Drawing.Point(13, 140);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(343, 45);
+            this.groupBox3.TabIndex = 7;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Ship installation path";
+            // 
+            // txtShipsPath
+            // 
+            this.txtShipsPath.Location = new System.Drawing.Point(6, 19);
+            this.txtShipsPath.Name = "txtShipsPath";
+            this.txtShipsPath.Size = new System.Drawing.Size(293, 20);
+            this.txtShipsPath.TabIndex = 0;
+            // 
+            // btnSelectShipsPath
+            // 
+            this.btnSelectShipsPath.Location = new System.Drawing.Point(306, 19);
+            this.btnSelectShipsPath.Name = "btnSelectShipsPath";
+            this.btnSelectShipsPath.Size = new System.Drawing.Size(30, 20);
+            this.btnSelectShipsPath.TabIndex = 1;
+            this.btnSelectShipsPath.Text = "...";
+            this.btnSelectShipsPath.UseVisualStyleBackColor = true;
+            this.btnSelectShipsPath.Click += new System.EventHandler(this.btnSelectShipsPath_Click);
+            // 
             // Form2
             // 
             this.AcceptButton = this.btnSave;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(368, 196);
+            this.ClientSize = new System.Drawing.Size(368, 252);
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -149,6 +184,8 @@
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -166,5 +203,8 @@
         private System.Windows.Forms.Button btnSelectModPath;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Button btnSelectShipsPath;
+        private System.Windows.Forms.TextBox txtShipsPath;
     }
 }
