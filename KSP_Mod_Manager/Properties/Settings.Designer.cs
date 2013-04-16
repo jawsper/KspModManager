@@ -58,5 +58,17 @@ namespace KSP_Mod_Manager.Properties {
                 this["AnnoyingFirstTimeMessageShown"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ShipsPath {
+            get {
+                return ((string)(this["ShipsPath"]));
+            }
+            set {
+                this["ShipsPath"] = value;
+            }
+        }
     }
 }
