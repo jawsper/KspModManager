@@ -99,6 +99,7 @@ namespace KSP_Mod_Manager
                 {
                     foreach (var file in za.Entries.Where(entry => entry.Length > 0))
                     {
+                        if (!file.FullName.StartsWith(m_RootDir)) continue;
                         var relative_path = file.FullName.Substring(m_RootDir.Length);
                         if (relative_path.Count(c => c == s_ZipDirectorySeparator) == 0) continue; // don't place files in ksp root dir
                         if (s_ValidDestinationFolders.Contains(relative_path.Split(s_ZipDirectorySeparator)[0], new Comparer<string>((a, b) => a.Equals(b, StringComparison.InvariantCultureIgnoreCase))))
