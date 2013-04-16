@@ -68,6 +68,7 @@
             // 
             // lstAvailableMods
             // 
+            this.lstAvailableMods.AllowDrop = true;
             this.lstAvailableMods.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -76,6 +77,8 @@
             this.lstAvailableMods.Name = "lstAvailableMods";
             this.lstAvailableMods.Size = new System.Drawing.Size(452, 316);
             this.lstAvailableMods.TabIndex = 1;
+            this.lstAvailableMods.DragDrop += new System.Windows.Forms.DragEventHandler(this.lstAvailableMods_DragDrop);
+            this.lstAvailableMods.DragEnter += new System.Windows.Forms.DragEventHandler(this.lstAvailableMods_DragEnter);
             this.lstAvailableMods.DoubleClick += new System.EventHandler(this.lstAvailableMods_DoubleClick);
             // 
             // tabControl1
@@ -163,26 +166,26 @@
             // refreshFolderToolStripMenuItem
             // 
             this.refreshFolderToolStripMenuItem.Name = "refreshFolderToolStripMenuItem";
-            this.refreshFolderToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.refreshFolderToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
             this.refreshFolderToolStripMenuItem.Text = "Refresh folder";
             this.refreshFolderToolStripMenuItem.Click += new System.EventHandler(this.refreshFolderToolStripMenuItem_Click);
             // 
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
             this.optionsToolStripMenuItem.Text = "Set paths";
             this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(144, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 

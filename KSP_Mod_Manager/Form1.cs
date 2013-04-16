@@ -21,6 +21,7 @@
 //
 
 using System;
+using System.IO;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -130,6 +131,28 @@ namespace KSP_Mod_Manager
         private void lstInstalledMods_DoubleClick(object sender, EventArgs e)
         {
             btnUninstallMod_Click(sender, e);
+        }
+
+        private void lstAvailableMods_DragEnter(object sender, DragEventArgs e)
+        {
+            Console.WriteLine(string.Join(", ", e.Data.GetFormats()));
+
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effect = DragDropEffects.Copy;
+            }
+            else
+            {
+                e.Effect = DragDropEffects.None;
+            }
+        }
+
+        private void lstAvailableMods_DragDrop(object sender, DragEventArgs e)
+        {
+            var filename = new FileInfo(((string[])e.Data.GetData(DataFormats.FileDrop))[0]);
+            Console.WriteLine("'{0}'", filename);
+            filename.CopyTo(Path.Combine(mods.ModDirectory, filename.Name));
+            UpdateMods();
         }
     }
 }
