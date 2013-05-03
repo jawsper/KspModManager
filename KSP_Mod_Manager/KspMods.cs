@@ -111,6 +111,16 @@ namespace KSP_Mod_Manager
             return mods.ToArray();
         }
 
+        public IEnumerable<string> GetInstalledFiles()
+        {
+            var files = new List<string>();
+            foreach (var f in db.Table<InstalledFiles>())
+            {
+                files.Add(f.Filename);
+            }
+            return files;
+        }
+
         public bool InstallMod(KspPackage pkg)
         {
             var installation_date = DateTime.Now;
