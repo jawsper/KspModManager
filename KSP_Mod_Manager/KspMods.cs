@@ -127,7 +127,7 @@ namespace KSP_Mod_Manager
             var files = pkg.Install(InstallationDirectory);
             if (files == null)
             {
-                return false ;
+                return false;
             }
 
             db.RunInTransaction(() =>
@@ -135,7 +135,7 @@ namespace KSP_Mod_Manager
                 db.Insert(new InstalledMods()
                 {
                     ModArchive = pkg.Filename,
-                    InstallationDate = DateTime.Now
+                    InstallationDate = installation_date
                 });
                 foreach (var filename in files)
                 {
@@ -145,7 +145,7 @@ namespace KSP_Mod_Manager
                         db.Insert(new InstalledFiles()
                         {
                             Filename = filename,
-                            InstallationDate = DateTime.Now
+                            InstallationDate = installation_date
                         });
                     }
                     db.Insert(new ModFiles()
