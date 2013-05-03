@@ -154,5 +154,22 @@ namespace KSP_Mod_Manager
             filename.CopyTo(Path.Combine(mods.ModDirectory, filename.Name));
             UpdateMods();
         }
+
+        private void tabControl1_Selected(object sender, TabControlEventArgs e)
+        {
+            if (e.TabPage == tabPage3)
+            {
+                UpdateFileList();
+            }
+        }
+
+        private void UpdateFileList()
+        {
+            treeInstalledFiles.Nodes.Clear();
+            foreach (var file in mods.GetInstalledFiles())
+            {
+                treeInstalledFiles.Nodes.Add(file);
+            }
+        }
     }
 }

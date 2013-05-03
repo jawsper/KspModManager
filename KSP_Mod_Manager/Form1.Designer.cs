@@ -45,10 +45,13 @@
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label1 = new System.Windows.Forms.Label();
             this.lblStatus = new System.Windows.Forms.Label();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.treeInstalledFiles = new System.Windows.Forms.TreeView();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            this.tabPage3.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnInstallMod
@@ -88,11 +91,13 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Location = new System.Drawing.Point(12, 43);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(460, 390);
             this.tabControl1.TabIndex = 2;
+            this.tabControl1.Selected += new System.Windows.Forms.TabControlEventHandler(this.tabControl1_Selected);
             // 
             // tabPage1
             // 
@@ -216,6 +221,25 @@
             this.lblStatus.TabIndex = 5;
             this.lblStatus.Text = "Idle";
             // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.treeInstalledFiles);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(452, 364);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "Installed files";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // treeInstalledFiles
+            // 
+            this.treeInstalledFiles.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeInstalledFiles.Location = new System.Drawing.Point(3, 3);
+            this.treeInstalledFiles.Name = "treeInstalledFiles";
+            this.treeInstalledFiles.Size = new System.Drawing.Size(446, 358);
+            this.treeInstalledFiles.TabIndex = 0;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -233,6 +257,7 @@
             this.tabPage2.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.tabPage3.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -257,6 +282,8 @@
         private System.Windows.Forms.Label lblStatus;
         private System.Windows.Forms.ToolStripMenuItem refreshFolderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.TreeView treeInstalledFiles;
     }
 }
 
