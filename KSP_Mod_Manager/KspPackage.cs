@@ -36,7 +36,7 @@ namespace KSP_Mod_Manager
         private string m_RootDir = "";
 
         private static readonly char s_ZipDirectorySeparator = '/';
-        private static readonly string[] s_ValidDestinationFolders = { "Internals", "Parts", "PluginData", "Plugins", "Resources", "Ships", "sounds" };
+        private static readonly string[] s_ValidDestinationFolders = { "GameData", "Internals", "Parts", "PluginData", "Plugins", "Resources", "Ships", "sounds" };
         private static readonly Regex s_ValidDestinationRegex;
 
         static KspPackage()
@@ -90,42 +90,68 @@ namespace KSP_Mod_Manager
             }
         }
 
-        public IEnumerable<string> Install(string destination)
+        public IEnumerable<string> Install(string a_Destination, string a_CompatibilityPath = null)
         {
-            /*try
-            {*/
-                var installed_files = new List<string>();
-                using (var za = ZipFile.OpenRead(m_Path.FullName))
+            string destination = a_Destination;
+            var installed_files = new List<string>();
+            using (var za = ZipFile.OpenRead(m_Path.FullName))
+            {
+                foreach (var file in za.Entries.Where(entry => entry.Length > 0))
                 {
-                    foreach (var file in za.Entries.Where(entry => entry.Length > 0))
+                    if (!file.FullName.StartsWith(m_RootDir)) continue;
+                    
+                    var relative_path = file.FullName.Substring(m_RootDir.Length);
+                    
+                    if (relative_path.IndexOf(s_ZipDirectorySeparator) < 0) continue; // don't place files in ksp root dir
+                    
+                    if (s_ValidDestinationFolders.Contains(relative_path.Split(s_ZipDirectorySeparator)[0], new Comparer<string>((a, b) => a.Equals(b, StringComparison.InvariantCultureIgnoreCase))))
                     {
-                        if (!file.FullName.StartsWith(m_RootDir)) continue;
-                        var relative_path = file.FullName.Substring(m_RootDir.Length);
-                        if (relative_path.Count(c => c == s_ZipDirectorySeparator) == 0) continue; // don't place files in ksp root dir
-                        if (s_ValidDestinationFolders.Contains(relative_path.Split(s_ZipDirectorySeparator)[0], new Comparer<string>((a, b) => a.Equals(b, StringComparison.InvariantCultureIgnoreCase))))
-                        {
-                            relative_path = relative_path.Replace(s_ZipDirectorySeparator, Path.DirectorySeparatorChar);
-                            var directory = Path.GetDirectoryName(relative_path);
+                        relative_path = relative_path.Replace(s_ZipDirectorySeparator, Path.DirectorySeparatorChar);
 
-                            if (!Directory.Exists(Path.Combine(destination, directory)))
-                            {
-                                Directory.CreateDirectory(Path.Combine(destination, directory));
-                            }
-                            if (!File.Exists(Path.Combine(destination, relative_path)))
-                            {
-                                file.ExtractToFile(Path.Combine(destination, relative_path));
-                            }
-                            installed_files.Add(relative_path);
+                        if (a_CompatibilityPath != null && !relative_path.StartsWith("GameData"))
+                        {
+                            relative_path = Path.Combine(a_CompatibilityPath, relative_path);
                         }
+                        
+                        var directory = Path.GetDirectoryName(relative_path);
+
+                        var destination_directory = Path.Combine(a_Destination, directory);
+                        if (!Directory.Exists(destination_directory))
+                        {
+                            Directory.CreateDirectory(destination_directory);
+                        }
+
+                        var destination_filename = Path.Combine(a_Destination, relative_path);
+                        if (!File.Exists(destination_filename))
+                        {
+                            file.ExtractToFile(destination_filename);
+                            if (a_CompatibilityPath != null)
+                            {
+                                UpdatePartsFileTo_0_20(destination_filename);
+                            }
+                        }
+                        installed_files.Add(relative_path);
                     }
                 }
-                return installed_files;
-            /*}
-            catch (Exception e)
+            }
+            return installed_files;
+        }
+
+        private void UpdatePartsFileTo_0_20(string a_Filename)
+        {
+            if (a_Filename.EndsWith("part.cfg"))
             {
-                MessageBox.Show(string.Format("Error installing mod: {0}", e.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return null;
-            }*/
+                foreach(var line in File.ReadAllLines(a_Filename))
+                {
+                    if (line.StartsWith("PART"))
+                    {
+                        return;
+                    }
+                }
+                var filedata = File.ReadAllText(a_Filename);
+                filedata = "PART\r\n{\r\n" + filedata + "\r\n}\r\n";
+                File.WriteAllText(a_Filename, filedata);
+            }
         }
 
         class Comparer<T> : IEqualityComparer<T>

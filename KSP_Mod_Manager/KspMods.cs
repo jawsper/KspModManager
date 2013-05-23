@@ -25,6 +25,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace KSP_Mod_Manager
 {
@@ -36,7 +37,13 @@ namespace KSP_Mod_Manager
         private static readonly string s_InstalledModsCache = "Installed";
 
         private string ModPath { get { return m_ModPath; } }
+        private string TempPath { get { return Path.Combine(m_ModPath, "temp"); } }
         private string InstalledModCache { get { return Path.Combine(m_ModPath, s_InstalledModsCache); } }
+
+        private string GetAssemblyVersion()
+        {
+            return Assembly.GetExecutingAssembly().GetName().Version.ToString();
+        }
 
         public KspMods(string a_InstallationDirectory, string a_ModPath )
         {
@@ -45,14 +52,49 @@ namespace KSP_Mod_Manager
 
             db = new SQLiteConnection("kmm.sqlite");
 
-            var tables = new string[] { "InstalledMods", "ModFiles", "InstalledFiles" };
-            var creators = new Type[] { typeof(InstalledMods), typeof(ModFiles), typeof(InstalledFiles) };
-
-            for (int i = 0; i < tables.Length; i++)
+            // make sure the table exists
+            if (db.GetTableInfo("KMMInfo").Count == 0)
             {
-                var info = db.GetTableInfo(tables[i]);
+                db.CreateTable<KMMInfo>();
+            }
+
+            var tables = new Type[] { typeof(InstalledMods), typeof(ModFiles), typeof(InstalledFiles) };
+
+            foreach (var table in tables)
+            {
+                var info = db.GetTableInfo(table.Name);
                 if (info.Count == 0)
-                    db.CreateTable(creators[i]);
+                    db.CreateTable(table);
+            }
+
+            // oh noez it does not match
+            if (db.Table<KMMInfo>().Count() == 0 || db.Table<KMMInfo>().First().Version != GetAssemblyVersion())
+            {
+                // salvage data
+                var installed_mods = db.Table<InstalledMods>().ToList();
+                db.DropTable<InstalledMods>();
+                db.CreateTable<InstalledMods>();
+                db.InsertAll(installed_mods);
+                
+                var mod_files = db.Table<ModFiles>().ToList();
+                db.DropTable<ModFiles>();
+                db.CreateTable<ModFiles>();
+                db.InsertAll(mod_files);
+                
+                var installed_files = db.Table<InstalledFiles>().ToList();
+                db.DropTable<InstalledFiles>();
+                db.CreateTable<InstalledFiles>();
+                db.InsertAll(installed_files);
+            }
+
+            // make sure the table is filled
+            if (db.Table<KMMInfo>().Count() == 0)
+            {
+                var nfo = new KMMInfo()
+                {
+                    Version = GetAssemblyVersion()
+                };
+                db.Insert(nfo);
             }
         }
 
@@ -116,7 +158,18 @@ namespace KSP_Mod_Manager
             var files = new List<string>();
             foreach (var f in db.Table<InstalledFiles>())
             {
-                files.Add(f.Filename);
+                files.Add(f.Filename + " - " + f.CRC);
+            }
+            return files;
+        }
+
+        public Dictionary<string, List<string>> GetInstalledModFiles()
+        {
+            var files = new Dictionary<string, List<string>>();
+            foreach (var f in db.Table<ModFiles>())
+            {
+                if (!files.ContainsKey(f.Filename)) files.Add(f.Filename, new List<string>());
+                files[f.Filename].Add(f.ModArchive);
             }
             return files;
         }
@@ -124,7 +177,19 @@ namespace KSP_Mod_Manager
         public bool InstallMod(KspPackage pkg)
         {
             var installation_date = DateTime.Now;
-            var files = pkg.Install(InstallationDirectory);
+            IEnumerable<string> files = null;
+            if (Properties.Settings.Default.CompatibilityMode == "0.20")
+            {
+                var name_without_ext = pkg.Filename;
+                name_without_ext = name_without_ext.Substring(0, name_without_ext.LastIndexOf('.'));
+                var new_style_path = Path.Combine("GameData", name_without_ext);
+                files = pkg.Install(InstallationDirectory, new_style_path);
+            }
+            else
+            {
+                files = pkg.Install(InstallationDirectory);
+            }
+
             if (files == null)
             {
                 return false;
@@ -202,6 +267,13 @@ namespace KSP_Mod_Manager
             }
         }
 
+        #region Database Tables
+
+        class KMMInfo
+        {
+            public string Version { get; set; }
+        }
+
         class InstalledMods
         {
             [PrimaryKey]
@@ -220,7 +292,9 @@ namespace KSP_Mod_Manager
         {
             [PrimaryKey]
             public string Filename { get; set; }
+            public string CRC { get; set; }
             public DateTime InstallationDate { get; set; }
         }
+        #endregion
     }
 }

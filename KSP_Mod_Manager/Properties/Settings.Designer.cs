@@ -70,5 +70,17 @@ namespace KSP_Mod_Manager.Properties {
                 this["ShipsPath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.20")]
+        public string CompatibilityMode {
+            get {
+                return ((string)(this["CompatibilityMode"]));
+            }
+            set {
+                this["CompatibilityMode"] = value;
+            }
+        }
     }
 }
